@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aceislive | PC Specs</title>
-    
+    <title>Aceislive | PC Specs & Setup</title>
+
+    <meta name="title" content="Aceislive | PC Specs & Setup">
+    <meta name="description" content="Official setup and hardware specifications for Aceislive. Streamer, Gamer, and Content Creator.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aceislive.github.io/"> 
+    <meta property="og:title" content="Aceislive | PC Specs & Setup">
+    <meta property="og:description" content="Check out my full gaming rig, peripherals, and daily 10 PM stream timings.">
+    <meta property="og:image" content="icon/new logo 2.jpg">
+
     <style>
         * { box-sizing: border-box; }
         :root {
@@ -31,15 +40,17 @@
             margin: 0; font-family: 'Inter', sans-serif;
             background-color: var(--bg); color: var(--text);
             transition: 0.3s; display: flex; flex-direction: column; 
-            min-height: 100vh; /* Needed for sticky footer */
+            min-height: 100vh; overflow-x: hidden;
         }
 
-        .wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; width: 100%; animation: fadeInUp 0.8s ease-out; flex: 1; }
+        .wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; width: 100%; flex: 1; }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .animate-in { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
         /* LIVE BADGE */
         .live-badge {
@@ -55,7 +66,7 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 59, 0); }
         }
 
-        /* HEADER & HERO */
+        /* HEADER */
         header { padding: 40px 0; }
         .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
         .hero-left { display: flex; align-items: center; gap: 18px; flex: 1; min-width: 300px; }
@@ -69,37 +80,34 @@
         .social-link {
             padding: 10px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--border);
             text-decoration: none; color: var(--text); font-size: 13px; font-weight: 500;
-            display: flex; align-items: center; gap: 8px; transition: 0.2s; backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 8px; transition: 0.3s; backdrop-filter: blur(10px);
         }
-        .social-link:hover { border-color: var(--accent); background: var(--accent); color: white; transform: translateY(-2px); }
+        .social-link:hover { border-color: var(--accent); background: var(--accent); color: white; transform: translateY(-3px); box-shadow: 0 10px 20px -10px var(--accent); }
         .social-link img { width: 16px; filter: var(--icon-filter); }
 
-        /* CONTENT CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-top: 10px; }
-        .card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; backdrop-filter: blur(15px); }
+        /* GRID */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 10px; }
+        .card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; backdrop-filter: blur(15px); transition: 0.3s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
         .card h3 { margin: 0 0 15px; font-size: 1.1rem; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
-        .copy-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 8px; transition: 0.2s; }
-        .copy-btn:hover { background: rgba(124, 92, 255, 0.1); }
-        .copy-btn img { width: 18px; opacity: 0.6; filter: var(--icon-filter); }
+        .copy-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 8px; transition: 0.2s; opacity: 0.5; }
+        .copy-btn:hover { opacity: 1; background: rgba(124, 92, 255, 0.1); }
+        .copy-btn img { width: 18px; filter: var(--icon-filter); }
 
-        .spec { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .spec { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
         .spec span:first-child { color: var(--muted); }
         .spec span:last-child { font-weight: 600; text-align: right; }
         .spec:last-child { border-bottom: none; }
 
-        /* FAVORITE GAMES */
+        /* GAMES */
         .games-title { margin: 40px 0 15px; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); }
-        .game-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
-        .game-item { 
-            background: var(--card); border: 1px solid var(--border); padding: 20px 10px; 
-            border-radius: 16px; text-align: center; font-weight: 800; font-size: 12px; 
-            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
-        }
-        .game-item:hover { border-color: var(--accent); background: rgba(124, 92, 255, 0.05); transform: translateY(-3px); }
+        .game-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 80px; }
+        .game-item { background: var(--card); border: 1px solid var(--border); padding: 20px 10px; border-radius: 16px; text-align: center; font-weight: 800; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .game-item:hover { border-color: var(--accent); color: var(--accent); background: rgba(124, 92, 255, 0.05); }
 
         /* FOOTER & BUTTONS */
-        footer { text-align: center; padding: 25px 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+        footer { text-align: center; padding: 30px 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
         
         #theme-toggle { 
             position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; 
@@ -109,26 +117,26 @@
         #theme-toggle img { width: 20px; filter: brightness(0) invert(1); }
 
         .contact-btn {
-            position: fixed; bottom: 20px; left: 20px;
+            position: fixed; bottom: 20px; left: 20px; height: 45px;
             background: var(--card); border: 1px solid var(--border);
-            color: var(--text); padding: 12px 18px; border-radius: 14px;
+            color: var(--text); padding: 0 18px; border-radius: 14px;
             text-decoration: none; font-size: 13px; font-weight: 700;
             display: flex; align-items: center; gap: 8px; 
             backdrop-filter: blur(10px); z-index: 1000; transition: 0.3s;
         }
         .contact-btn:hover { border-color: var(--accent); background: var(--accent); color: white; transform: scale(1.05); }
 
-        @media (max-width: 800px) { .game-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 650px) { 
             .header-inner { flex-direction: column; align-items: flex-start; } 
             .top-socials { width: 100%; }
-            .contact-btn { bottom: 80px; left: 20px; } /* Prevent overlap on small screens */
+            .contact-btn, #theme-toggle { bottom: 20px; } 
+            .game-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
+<div class="wrapper animate-in">
     <header>
         <div class="header-inner">
             <div class="hero-left">
@@ -168,6 +176,16 @@
                 <div class="spec"><span>Microphone</span><span>Fifine T669</span></div>
                 <div class="spec"><span>Webcam</span><span>Kreo Owl 1080p</span></div>
             </div>
+
+            <div class="card">
+                <h3>📅 Stream Timings</h3>
+                <div class="spec"><span>Monday - Sunday</span><span>10:00 PM IST</span></div>
+                <div class="spec"><span>Status</span><span>Every Single Day 🔥</span></div>
+                <div class="spec" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+                    <span style="color: var(--accent); font-weight: 800;">NEXT STREAM</span>
+                    <span style="color: #00ff88;">Tonight at 10 PM</span>
+                </div>
+            </div>
         </div>
 
         <h3 class="games-title">Favorite Games</h3>
@@ -192,20 +210,19 @@
     document.getElementById("year").textContent = new Date().getFullYear();
 
     function copyRig() {
-        navigator.clipboard.writeText("CPU: Ryzen 7 3700X, GPU: RTX 2060 Super, RAM: 16GB");
+        navigator.clipboard.writeText("CPU: Ryzen 7 3700X, GPU: RTX 2060 Super, Mobo: MSI B450, RAM: 16GB");
         alert("Rig specs copied!");
     }
 
     function copyGear() {
-        navigator.clipboard.writeText("Samsung G4 240Hz, Acer Nitro 144Hz, Logitech G402, Fifine T669");
+        navigator.clipboard.writeText("Samsung G4 240Hz, Acer Nitro 144Hz, Logitech G402, HyperX Cloud, Fifine T669");
         alert("Gear info copied!");
     }
 
     const toggle = document.getElementById("theme-toggle");
-    const themeIcon = document.getElementById("theme-icon");
     toggle.addEventListener("click", () => {
         document.body.classList.toggle("light");
-        themeIcon.src = document.body.classList.contains("light") 
+        document.getElementById("theme-icon").src = document.body.classList.contains("light") 
             ? "https://cdn-icons-png.flaticon.com/512/702/702471.png" 
             : "https://cdn-icons-png.flaticon.com/512/869/869869.png";
     });
