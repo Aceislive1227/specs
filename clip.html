@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aceislive | Community Clips</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
+    <style>
+        :root {
+            --bg: #090c10;
+            --card: rgba(18, 24, 38, 0.8);
+            --accent: #7c5cff;
+            --text: #e6e8eb;
+            --muted: #9aa4b2;
+            --border: #1f2937;
+        }
+
+        body.light {
+            --bg: #f3f4f6;
+            --card: rgba(255, 255, 255, 0.85);
+            --text: #111827;
+            --muted: #6b7280;
+            --accent: #6366f1;
+            --border: #e5e7eb;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+
+        body {
+            margin: 0; font-family: 'Inter', sans-serif;
+            background-color: var(--bg); color: var(--text);
+            line-height: 1.4; display: flex; flex-direction: column;
+            transition: 0.3s;
+        }
+
+        .container { width: 100%; padding: 30px 40px; flex: 1 0 auto; }
+
+        header { padding-bottom: 30px; display: flex; flex-direction: column; gap: 12px; }
+
+        .back-btn { 
+            text-decoration: none; color: var(--muted); font-size: 11px; font-weight: 700; 
+            border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; 
+            transition: 0.2s; display: inline-flex; width: fit-content;
+            text-transform: uppercase; letter-spacing: 0.5px; background: var(--card);
+        }
+        .back-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+        h1 { margin: 0; font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
+        h1 span { color: var(--accent); }
+
+        .clip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        .clip-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px; 
+            overflow: hidden; transition: 0.3s ease; text-decoration: none; color: inherit; 
+            display: flex; flex-direction: column; 
+        }
+        .clip-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+        .thumb-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+        .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+        
+        .play-icon { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 44px; height: 44px; background: var(--accent); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: white; 
+        }
+
+        .clip-info { padding: 16px; }
+        .clip-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--text); }
+        .clip-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+        .clipper-name { color: var(--accent); font-weight: 700; }
+        .timestamp { background: rgba(124, 92, 255, 0.1); color: var(--accent); padding: 3px 7px; border-radius: 5px; font-weight: 700; }
+
+        footer { flex-shrink: 0; padding: 30px; text-align: center; border-top: 1px solid var(--border); background: var(--card); margin-top: 50px; }
+        .footer-text { font-size: 13px; color: var(--muted); margin: 0; }
+        .footer-accent { color: var(--accent); font-weight: 700; }
+
+        #theme-toggle { 
+            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; 
+            border-radius: 14px; background: var(--accent); display: flex; 
+            align-items: center; justify-content: center; cursor: pointer; z-index: 1000;
+        }
+        #theme-toggle img { width: 20px; filter: brightness(0) invert(1); }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.5rem; }
+            .clip-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" class="back-btn">← Back to Setup</a>
+        <h1>Community <span>Clips</span></h1>
+    </header>
+
+    <div id="clip-gallery" class="clip-grid">
+        <p id="loading-msg">Fetching latest 90s clips...</p>
+    </div>
+</div>
+
+<footer>
+    <p class="footer-text">© 2026 <span class="footer-accent">ACEISLIVE</span>. All Gameplay Rights Reserved.</p>
+</footer>
+
+<div id="theme-toggle">
+    <img id="theme-icon" src="https://cdn-icons-png.flaticon.com/512/702/702471.png">
+</div>
+
+<script>
+    // THEME TOGGLE LOGIC
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+        document.body.classList.toggle("light");
+        const isLight = document.body.classList.contains("light");
+        document.getElementById("theme-icon").src = isLight 
+            ? "https://cdn-icons-png.flaticon.com/512/702/702471.png" 
+            : "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+    });
+
+    // YOUR GOOGLE SHEET CSV LINK
+    const sheetCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS8Q20sDcvSamzmdXOaZqRaLqWfHmoxhc4iAYMF68LZhKiE2v0aYui9LHBZJ0zuLZpHQusWCp3DuWRy/pub?output=csv";
+
+    async function loadClips() {
+        try {
+            const response = await fetch(sheetCSV);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Skip Header Row
+            const gallery = document.getElementById('clip-gallery');
+            
+            if (rows.length === 0 || rows[0].trim() === "") {
+                gallery.innerHTML = "<p>No clips saved yet! Type !clip in chat.</p>";
+                return;
+            }
+
+            gallery.innerHTML = '';
+
+            // Reverse so newest clips show first
+            rows.reverse().forEach(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (cols.length < 2) return;
+
+                const id = cols[0].replace(/"/g, '').trim();
+                const user = cols[1] ? cols[1].replace(/"/g, '').trim() : "Viewer";
+                const title = cols[2] ? cols[2].replace(/"/g, '').trim() : "90s Epic Moment";
+                const time = cols[3] ? cols[3].replace(/"/g, '').trim() : "0";
+
+                // This builds the YouTube link with the timestamp jump
+                const videoURL = `https://www.youtube.com/watch?v=${id}&t=${time}`;
+
+                gallery.innerHTML += `
+                    <a href="${videoURL}" target="_blank" class="clip-card">
+                        <div class="thumb-wrap">
+                            <img src="https://img.youtube.com/vi/${id}/mqdefault.jpg">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="clip-info">
+                            <span class="clip-title">${title}</span>
+                            <div class="clip-meta">
+                                <span>by <span class="clipper-name">${user}</span></span>
+                                <span class="timestamp">Play 90s</span>
+                            </div>
+                        </div>
+                    </a>`;
+            });
+        } catch (err) {
+            document.getElementById('loading-msg').innerText = "Error loading clips. Please refresh.";
+        }
+    }
+
+    loadClips();
+</script>
+</body>
+</html>
