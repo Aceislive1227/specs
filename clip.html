@@ -3,58 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aceislive | Stream Hub</title>
+    <title>Aceislive | Clip Hub</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
     <style>
-        :root { --bg: #090c10; --card: #161b22; --accent: #7c5cff; --text: #e6e8eb; --border: #30363d; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
-        
-        /* Navigation / Avatar Bar */
-        .streamer-nav { 
-            background: rgba(18, 22, 29, 0.95); 
-            padding: 15px; 
-            display: flex; 
-            justify-content: center; 
-            gap: 25px; 
-            border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-        .streamer-link { text-decoration: none; text-align: center; transition: 0.3s; width: 70px; }
-        .nav-avatar { 
-            width: 50px; height: 50px; border-radius: 50%; 
-            border: 2px solid transparent; margin-bottom: 5px; 
-            object-fit: cover; transition: 0.3s;
-        }
-        .streamer-link:hover .nav-avatar { transform: translateY(-3px); border-color: var(--accent); }
-        .streamer-link.active .nav-avatar { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
-        .nav-name { font-size: 10px; font-weight: 700; color: var(--text); text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --border: #30363d; --header: #161b22; }
+        .light-theme { --bg: #f0f2f5; --card: #ffffff; --accent: #0064eb; --text: #1c1e21; --border: #dddfe2; --header: #ffffff; }
 
-        .container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 50px; }
-        .header h1 { font-size: 2.5rem; font-weight: 900; margin: 0; letter-spacing: -1px; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; transition: 0.3s; }
+        
+        .streamer-nav { 
+            background: var(--header); padding: 10px; display: flex; justify-content: center; 
+            align-items: center; gap: 15px; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Nav Buttons */
+        .nav-btn {
+            background: var(--bg); border: 1px solid var(--border); color: var(--text);
+            padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;
+            text-decoration: none; cursor: pointer; transition: 0.2s;
+        }
+        .nav-btn:hover { border-color: var(--accent); }
+
+        .streamer-link { text-decoration: none; text-align: center; transition: 0.2s; width: 55px; opacity: 0.6; }
+        .streamer-link:hover, .streamer-link.active { opacity: 1; }
+        .nav-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid transparent; object-fit: cover; }
+        .active .nav-avatar { border-color: var(--accent); box-shadow: 0 0 8px var(--accent); }
+        .nav-name { font-size: 8px; font-weight: 700; text-transform: uppercase; margin-top: 4px; color: var(--text); }
+
+        .container { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin: 10px 0 30px 0; }
+        .header h1 { font-size: 1.6rem; font-weight: 900; margin: 0; }
         .header h1 span { color: var(--accent); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: 0.3s; }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .thumb-box { position: relative; width: 100%; aspect-ratio: 16/9; }
+        /* Compact Community Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .thumb-box { width: 100%; aspect-ratio: 16/9; background: #000; }
         .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
-        .info { padding: 15px; }
-        .clip-title { font-weight: 800; color: #fff; display: block; margin-bottom: 8px; font-size: 1.1rem; }
-        .meta { font-size: 12px; color: #8b949e; }
-        .btn { display: block; margin-top: 15px; background: var(--accent); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; }
+        
+        .info { padding: 12px; }
+        .clip-title { font-weight: 700; color: var(--text); display: block; font-size: 0.9rem; line-height: 1.3; height: 2.6em; overflow: hidden; }
+        .meta { font-size: 11px; color: #8b949e; margin-top: 6px; }
+        .btn { 
+            display: block; margin-top: 10px; background: #238636; color: white; 
+            text-align: center; padding: 8px; border-radius: 5px; text-decoration: none; 
+            font-weight: 700; font-size: 12px; 
+        }
+        .btn:hover { background: #2ea043; }
     </style>
 </head>
 <body>
 
-<div class="streamer-nav" id="nav-bar">
-    </div>
+<div class="streamer-nav">
+    <a href="clips.html" class="nav-btn">🏠 ALL</a>
+    <button onclick="toggleTheme()" class="nav-btn">🌓 THEME</button>
+    <div id="nav-bar" style="display: flex; gap: 12px; border-left: 1px solid var(--border); padding-left: 15px;">
+        </div>
+</div>
 
 <div class="container">
     <div class="header">
-        <h1 id="page-title">STREAM <span>HUB</span></h1>
-        <p id="page-subtitle">Select a streamer to watch their 90s action clips</p>
+        <h1 id="page-title">COMMUNITY <span>CLIPS</span></h1>
     </div>
     <div id="gallery" class="grid">Loading clips...</div>
 </div>
@@ -64,10 +75,15 @@
     const params = new URLSearchParams(window.location.search);
     const filter = params.get('streamer');
 
+    function toggleTheme() {
+        document.body.classList.toggle('light-theme');
+        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    }
+
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
+
     function toSec(str) {
-        let total = 0;
-        let t = String(str).toLowerCase();
-        let m = t.match(/\d+/g);
+        let total = 0; let t = String(str).toLowerCase(); let m = t.match(/\d+/g);
         if (m) {
             if (t.includes('h') || m.length === 3) total = (m[0]*3600)+(m[1]*60)+(m[2]*1);
             else if (t.includes('m') || m.length === 2) total = (m[0]*60)+(m[1]*1);
@@ -80,11 +96,9 @@
         const res = await fetch(sheetURL);
         const csv = await res.text();
         const rows = csv.split('\n').slice(1).reverse();
-        
         const nav = document.getElementById('nav-bar');
         const gallery = document.getElementById('gallery');
         
-        // 1. Get Unique Streamers & their Logos
         const streamerInfo = {};
         rows.forEach(row => {
             const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -95,14 +109,11 @@
             }
         });
 
-        // 2. Build Nav Bar
         nav.innerHTML = '';
         Object.keys(streamerInfo).forEach(name => {
             const cid = streamerInfo[name];
             const activeClass = (filter && filter.toLowerCase() === name.toLowerCase()) ? 'active' : '';
-            // Service to get YouTube logo from ID
             const logo = `https://unavatar.io/youtube/${cid}`;
-            
             nav.innerHTML += `
                 <a href="?streamer=${name}" class="streamer-link ${activeClass}">
                     <img src="${logo}" class="nav-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${name}'">
@@ -110,47 +121,32 @@
                 </a>`;
         });
 
-        // 3. Update Titles
-        if (filter) {
-            document.getElementById('page-title').innerHTML = `${filter.toUpperCase()} <span>CLIPS</span>`;
-            document.getElementById('page-subtitle').innerHTML = `Last 90 seconds of the action from ${filter}`;
-        }
+        if (filter) document.getElementById('page-title').innerHTML = `${filter.toUpperCase()} <span>CLIPS</span>`;
 
-        // 4. Build Gallery
         gallery.innerHTML = '';
-        let found = 0;
         rows.forEach(row => {
             const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             if (cols.length < 5) return;
-            
             const sName = cols[4].trim().replace(/"/g, '');
             if (filter && sName.toLowerCase() !== filter.toLowerCase()) return;
 
-            found++;
             const vidId = cols[0].replace(/[^a-zA-Z0-9_-]/g, '').trim();
             const user = cols[1].replace(/"/g, '').trim();
             const title = cols[2].replace(/"/g, '').trim();
             const time = cols[3].trim();
-
             const start = Math.max(0, toSec(time) - 90);
-            const link = `https://www.youtube.com/watch?v=${vidId}&t=${start}s`;
 
             gallery.innerHTML += `
                 <div class="card">
-                    <div class="thumb-box">
-                        <img src="https://img.youtube.com/vi/${vidId}/mqdefault.jpg">
-                    </div>
+                    <div class="thumb-box"><img src="https://img.youtube.com/vi/${vidId}/mqdefault.jpg"></div>
                     <div class="info">
                         <span class="clip-title">${title}</span>
-                        <div class="meta">Clipped by <b>${user}</b></div>
-                        <a href="${link}" target="_blank" class="btn">WATCH CLIP</a>
+                        <div class="meta">By <b>${user}</b> ${filter ? '' : '• ' + sName}</div>
+                        <a href="https://www.youtube.com/watch?v=${vidId}&t=${start}s" target="_blank" class="btn">WATCH 90S</a>
                     </div>
                 </div>`;
         });
-
-        if (found === 0) gallery.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Select a streamer above!</p>';
     }
-
     loadHub();
 </script>
 </body>
