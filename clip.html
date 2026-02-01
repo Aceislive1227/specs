@@ -3,163 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aceislive | Community Clips</title>
+    <title>Aceislive | Stream Hub</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
     <style>
-        :root { 
-            --bg: #090c10; 
-            --card: rgba(18, 24, 38, 0.8); 
-            --accent: #7c5cff; 
-            --text: #e6e8eb; 
-            --muted: #9aa4b2; 
-            --border: #1f2937; 
-        }
-        * { box-sizing: border-box; }
-        body { 
-            margin: 0; 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text); 
+        :root { --bg: #090c10; --card: #161b22; --accent: #7c5cff; --text: #e6e8eb; --border: #30363d; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* Navigation / Avatar Bar */
+        .streamer-nav { 
+            background: rgba(18, 22, 29, 0.95); 
+            padding: 15px; 
             display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
+            justify-content: center; 
+            gap: 25px; 
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(10px);
         }
-        .container { width: 100%; padding: 30px 40px; flex: 1; }
-        header { padding-bottom: 30px; display: flex; align-items: center; justify-content: space-between; }
-        .back-btn { text-decoration: none; color: var(--muted); font-size: 11px; font-weight: 700; border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; background: var(--card); text-transform: uppercase; }
-        h1 { margin: 0; font-size: 1.8rem; font-weight: 900; }
-        h1 span { color: var(--accent); }
-        .clip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .clip-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
-        .clip-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .thumb-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; display: block; overflow: hidden; }
-        .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; opacity: 0.9; }
-        .clip-info { padding: 20px; }
-        .clip-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--text); display: block; }
-        .clip-meta { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 5px; }
-        .btn-group { margin-top: 15px; display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700; text-align: center; transition: 0.2s; }
-        .btn-watch { background: var(--accent); color: white; }
-        .btn-down { border: 1px solid var(--border); color: var(--text); }
-        .btn-down:hover { background: var(--border); }
-        footer { padding: 30px; text-align: center; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+        .streamer-link { text-decoration: none; text-align: center; transition: 0.3s; width: 70px; }
+        .nav-avatar { 
+            width: 50px; height: 50px; border-radius: 50%; 
+            border: 2px solid transparent; margin-bottom: 5px; 
+            object-fit: cover; transition: 0.3s;
+        }
+        .streamer-link:hover .nav-avatar { transform: translateY(-3px); border-color: var(--accent); }
+        .streamer-link.active .nav-avatar { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
+        .nav-name { font-size: 10px; font-weight: 700; color: var(--text); text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+
+        .container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 2.5rem; font-weight: 900; margin: 0; letter-spacing: -1px; }
+        .header h1 span { color: var(--accent); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: 0.3s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .thumb-box { position: relative; width: 100%; aspect-ratio: 16/9; }
+        .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+        .info { padding: 15px; }
+        .clip-title { font-weight: 800; color: #fff; display: block; margin-bottom: 8px; font-size: 1.1rem; }
+        .meta { font-size: 12px; color: #8b949e; }
+        .btn { display: block; margin-top: 15px; background: var(--accent); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>ACEISLIVE <span>CLIPS</span></h1>
-        <a href="https://youtube.com/@aceislive" target="_blank" class="back-btn">YouTube Channel →</a>
-    </header>
-    <div id="clip-gallery" class="clip-grid">
-        <p style="text-align: center; grid-column: 1/-1;">Loading your epic moments...</p>
+<div class="streamer-nav" id="nav-bar">
     </div>
+
+<div class="container">
+    <div class="header">
+        <h1 id="page-title">STREAM <span>HUB</span></h1>
+        <p id="page-subtitle">Select a streamer to watch their 90s action clips</p>
+    </div>
+    <div id="gallery" class="grid">Loading clips...</div>
 </div>
 
-<footer>© 2026 <span style="color:var(--accent)">ACEISLIVE</span>. All community clips synced live.</footer>
-
 <script>
-    // 1. Google Sheets CSV Source
-    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS8Q20sDcvSamzmdXOaZqRaLqWfHmoxhc4iAYMF68LZhKiE2v0aYui9LHBZJ0zuLZpHQusWCp3DuWRy/pub?output=csv&cache=" + new Date().getTime();
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS8Q20sDcvSamzmdXOaZqRaLqWfHmoxhc4iAYMF68LZhKiE2v0aYui9LHBZJ0zuLZpHQusWCp3DuWRy/pub?output=csv&cb=" + new Date().getTime();
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('streamer');
 
-    // 2. Smart Time Calculator (The 90s Jump-Back Engine)
-    function calculateStartTime(rawTime) {
-        let totalSeconds = 0;
-        let time = String(rawTime).replace(/"/g, '').trim();
-
-        // Handle HH:MM:SS or MM:SS format
-        if (time.includes(':')) {
-            let parts = time.split(':').map(Number);
-            if (parts.length === 3) {
-                totalSeconds = (parts[0] * 3600) + (parts[1] * 60) + parts[2];
-            } else if (parts.length === 2) {
-                totalSeconds = (parts[0] * 60) + parts[1];
-            }
-        } 
-        // Handle 1h2m3s format
-        else if (time.match(/[hms]/)) {
-            const h = time.match(/(\d+)h/);
-            const m = time.match(/(\d+)m/);
-            const s = time.match(/(\d+)s/);
-            if (h) totalSeconds += parseInt(h[1]) * 3600;
-            if (m) totalSeconds += parseInt(m[1]) * 60;
-            if (s) totalSeconds += parseInt(s[1]);
-        } 
-        // Handle raw number format
-        else if (!isNaN(time) && time !== "") {
-            totalSeconds = parseInt(time);
+    function toSec(str) {
+        let total = 0;
+        let t = String(str).toLowerCase();
+        let m = t.match(/\d+/g);
+        if (m) {
+            if (t.includes('h') || m.length === 3) total = (m[0]*3600)+(m[1]*60)+(m[2]*1);
+            else if (t.includes('m') || m.length === 2) total = (m[0]*60)+(m[1]*1);
+            else total = m[0]*1;
         }
-
-        // Subtract 90 seconds, but don't go below 0
-        return Math.max(0, totalSeconds - 90); 
+        return total || 0;
     }
 
-    async function loadGallery() {
-        try {
-            const response = await fetch(sheetURL);
-            const csvData = await response.text();
-            const rows = csvData.split('\n').slice(1);
-            const gallery = document.getElementById('clip-gallery');
-            gallery.innerHTML = '';
-
-            let count = 0;
-            rows.reverse().forEach(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (cols.length < 1) return;
-
-                // CLEAN ID FROM COLUMN A
-                let videoId = cols[0].replace(/[^a-zA-Z0-9_-]/g, '').trim();
-                
-                // Skip invalid rows
-                if (videoId.length < 11 || videoId.toLowerCase().includes("variable")) return;
-
-                count++;
-                const username = (cols[1] || "Viewer").replace(/"/g, '').trim();
-                const clipTitle = (cols[2] || "Epic Moment").replace(/"/g, '').trim();
-                const timeStr = (cols[3] || "0").replace(/"/g, '').trim();
-
-                const startSeconds = calculateStartTime(timeStr);
-
-                // Build Final YouTube Link
-                const finalLink = `https://www.youtube.com/watch?v=${videoId}&t=${startSeconds}s`;
-                const thumbnail = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-
-                gallery.innerHTML += `
-                    <div class="clip-card">
-                        <a href="${finalLink}" target="_blank" class="thumb-wrap">
-                            <img src="${thumbnail}" onerror="this.src='https://via.placeholder.com/480x270?text=Live+Stream+Clip'">
-                            <div class="play-icon">▶</div>
-                        </a>
-                        <div class="clip-info">
-                            <span class="clip-title">${clipTitle}</span>
-                            <div class="clip-meta">
-                                <span>Clipped by: <b style="color:var(--accent)">${username}</b></span>
-                                <span>Time Offset: -90s Applied</span>
-                            </div>
-                            <div class="btn-group">
-                                <a href="${finalLink}" target="_blank" class="btn btn-watch">WATCH NOW</a>
-                                <a href="https://ssyoutube.com/en1/youtube-video-downloader?url=${encodeURIComponent(finalLink)}" target="_blank" class="btn btn-down">DOWNLOAD</a>
-                            </div>
-                        </div>
-                    </div>`;
-            });
-
-            if (count === 0) {
-                gallery.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>No clips found yet. Type !clip in chat!</p>";
+    async function loadHub() {
+        const res = await fetch(sheetURL);
+        const csv = await res.text();
+        const rows = csv.split('\n').slice(1).reverse();
+        
+        const nav = document.getElementById('nav-bar');
+        const gallery = document.getElementById('gallery');
+        
+        // 1. Get Unique Streamers & their Logos
+        const streamerInfo = {};
+        rows.forEach(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (cols.length >= 6) {
+                const name = cols[4].trim().replace(/"/g, '');
+                const cid = cols[5].trim().replace(/"/g, '');
+                if (!streamerInfo[name]) streamerInfo[name] = cid;
             }
+        });
 
-        } catch (err) {
-            console.error(err);
-            document.getElementById('clip-gallery').innerHTML = "<p>Error connecting to clip database.</p>";
+        // 2. Build Nav Bar
+        nav.innerHTML = '';
+        Object.keys(streamerInfo).forEach(name => {
+            const cid = streamerInfo[name];
+            const activeClass = (filter && filter.toLowerCase() === name.toLowerCase()) ? 'active' : '';
+            // Service to get YouTube logo from ID
+            const logo = `https://unavatar.io/youtube/${cid}`;
+            
+            nav.innerHTML += `
+                <a href="?streamer=${name}" class="streamer-link ${activeClass}">
+                    <img src="${logo}" class="nav-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${name}'">
+                    <div class="nav-name">${name}</div>
+                </a>`;
+        });
+
+        // 3. Update Titles
+        if (filter) {
+            document.getElementById('page-title').innerHTML = `${filter.toUpperCase()} <span>CLIPS</span>`;
+            document.getElementById('page-subtitle').innerHTML = `Last 90 seconds of the action from ${filter}`;
         }
+
+        // 4. Build Gallery
+        gallery.innerHTML = '';
+        let found = 0;
+        rows.forEach(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (cols.length < 5) return;
+            
+            const sName = cols[4].trim().replace(/"/g, '');
+            if (filter && sName.toLowerCase() !== filter.toLowerCase()) return;
+
+            found++;
+            const vidId = cols[0].replace(/[^a-zA-Z0-9_-]/g, '').trim();
+            const user = cols[1].replace(/"/g, '').trim();
+            const title = cols[2].replace(/"/g, '').trim();
+            const time = cols[3].trim();
+
+            const start = Math.max(0, toSec(time) - 90);
+            const link = `https://www.youtube.com/watch?v=${vidId}&t=${start}s`;
+
+            gallery.innerHTML += `
+                <div class="card">
+                    <div class="thumb-box">
+                        <img src="https://img.youtube.com/vi/${vidId}/mqdefault.jpg">
+                    </div>
+                    <div class="info">
+                        <span class="clip-title">${title}</span>
+                        <div class="meta">Clipped by <b>${user}</b></div>
+                        <a href="${link}" target="_blank" class="btn">WATCH CLIP</a>
+                    </div>
+                </div>`;
+        });
+
+        if (found === 0) gallery.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Select a streamer above!</p>';
     }
 
-    loadGallery();
+    loadHub();
 </script>
-
 </body>
 </html>
+
 
 
