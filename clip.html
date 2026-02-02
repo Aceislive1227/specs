@@ -47,7 +47,6 @@
         }
         .back-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* Login Button Style */
         .login-btn {
             background: var(--accent); color: white; border: none; padding: 10px 18px; 
             border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;
@@ -79,14 +78,12 @@
         .clip-info { padding: 16px; }
         .clip-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--text); height: 2.8em; overflow: hidden; }
         
-        /* Updated Meta for Avatars */
         .clip-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .clipper-box { display: flex; align-items: center; gap: 8px; }
         .clipper-avatar { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border); }
         .clipper-name { color: var(--accent); font-weight: 700; }
         .timestamp { background: rgba(124, 92, 255, 0.1); color: var(--accent); padding: 3px 7px; border-radius: 5px; font-weight: 700; white-space: nowrap; }
 
-        /* --- SIDEBAR --- */
         .sidebar-right {
             width: 75px; height: 100vh; background: var(--card);
             border-left: 1px solid var(--border);
@@ -156,8 +153,9 @@
 </div>
 
 <script>
-    // --- GOOGLE SCRIPT URL ---
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLLL5DQPt6CVSNJ-hDtyjO6bNysVQmOeT26mvCJqsrpeUaktR6GgbWVrt45ttqcVbv/exec"; // REPLACE THIS
+    // --- CONFIGURATION ---
+    const CLIENT_ID = "275745601586-hqr018ate6g5ra7jn6q5maktf7q3la6h.apps.googleusercontent.com";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLLL5DQPt6CVSNJ-hDtyjO6bNysVQmOeT26mvCJqsrpeUaktR6GgbWVrt45ttqcVbv/exec";
 
     const themeToggle = document.getElementById("theme-toggle");
     const themeIcon = document.getElementById("theme-icon");
@@ -178,7 +176,12 @@
     function openLogin() {
         const w = 500, h = 600;
         const left = (screen.width/2)-(w/2), top = (screen.height/2)-(h/2);
-        window.open(`${GOOGLE_SCRIPT_URL}?mode=login`, "AceLogin", `width=${w},height=${h},top=${top},left=${left}`);
+        
+        // This direct URL construction bypasses the "bridge" page 
+        // and takes them straight to the Google Account selector
+        const directAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${GOOGLE_SCRIPT_URL}&response_type=code&scope=https://www.googleapis.com/auth/youtube.readonly&prompt=select_account`;
+        
+        window.open(directAuthUrl, "AceLogin", `width=${w},height=${h},top=${top},left=${left}`);
     }
 
     const sheetCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS8Q20sDcvSamzmdXOaZqRaLqWfHmoxhc4iAYMF68LZhKiE2v0aYui9LHBZJ0zuLZpHQusWCp3DuWRy/pub?output=csv&cb=" + new Date().getTime();
@@ -216,7 +219,6 @@
             sidebar.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" class="nav-avatar home-icon" onclick="window.location.href='clips.html'" title="Show All">`;
             
             Object.keys(streamerMap).forEach(name => {
-                // If it's a URL (avatar), use it directly, otherwise use unavatar
                 let iconUrl = streamerMap[name].startsWith('http') ? streamerMap[name] : `https://unavatar.io/youtube/${streamerMap[name]}`;
                 sidebar.innerHTML += `<img src="${iconUrl}" class="nav-avatar" title="${name}" onclick="window.location.href='?streamer=${name}'" onerror="this.src='https://ui-avatars.com/api/?name=${name}'">`;
             });
@@ -225,15 +227,17 @@
 
             gallery.innerHTML = '';
             rows.forEach(row => {
-                const cols = row.split(/,(?=(?:(?:[^**]*"){2})*[^"]*$)/);
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (cols.length < 4) return;
+                
                 const id = cols[0].replace(/"/g, '').trim();
                 const user = cols[1] ? cols[1].replace(/"/g, '').trim() : "Viewer";
                 const title = cols[2] ? cols[2].replace(/"/g, '').trim() : "Epic Moment";
                 const time = cols[3] ? cols[3].replace(/"/g, '').trim() : "0";
                 const sName = cols[4] ? cols[4].trim().replace(/"/g, '') : "";
-                // Avatar from Column G (Index 5 or 6 depending on your sheet structure)
-                const userAvatar = cols[5] ? cols[5].replace(/"/g, '').trim() : 'https://www.gstatic.com/identity/boq/profileindex/placeholder_96.png';
+                
+                // Avatar logic: Pulling from Column G (Index 6)
+                const userAvatar = (cols[6] && cols[6].includes('http')) ? cols[6].replace(/"/g, '').trim() : 'https://www.gstatic.com/identity/boq/profileindex/placeholder_96.png';
 
                 if (filter && sName.toLowerCase() !== filter.toLowerCase()) return;
 
@@ -264,6 +268,7 @@
 </script>
 </body>
 </html>
+
 
 
 
