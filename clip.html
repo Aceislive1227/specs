@@ -34,10 +34,10 @@
             transition: 0.3s; overflow-x: hidden;
         }
 
-        /* Container takes up space to push footer down */
         .container { width: 100%; padding: 30px 40px; flex: 1 0 auto; }
-
         header { padding-bottom: 30px; display: flex; flex-direction: column; gap: 12px; }
+
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
 
         .back-btn { 
             text-decoration: none; color: var(--muted); font-size: 11px; font-weight: 700; 
@@ -46,6 +46,14 @@
             text-transform: uppercase; letter-spacing: 0.5px; background: var(--card);
         }
         .back-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+        /* Login Button Style */
+        .login-btn {
+            background: var(--accent); color: white; border: none; padding: 10px 18px; 
+            border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.5px; transition: 0.3s;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(124, 92, 255, 0.4); }
 
         h1 { margin: 0; font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
         h1 span { color: var(--accent); }
@@ -69,49 +77,55 @@
         }
 
         .clip-info { padding: 16px; }
-        .clip-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--text); }
-        .clip-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+        .clip-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--text); height: 2.8em; overflow: hidden; }
+        
+        /* Updated Meta for Avatars */
+        .clip-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .clipper-box { display: flex; align-items: center; gap: 8px; }
+        .clipper-avatar { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border); }
         .clipper-name { color: var(--accent); font-weight: 700; }
-        .timestamp { background: rgba(124, 92, 255, 0.1); color: var(--accent); padding: 3px 7px; border-radius: 5px; font-weight: 700; }
+        .timestamp { background: rgba(124, 92, 255, 0.1); color: var(--accent); padding: 3px 7px; border-radius: 5px; font-weight: 700; white-space: nowrap; }
 
-        /* --- SIDEBAR ON RIGHT --- */
+        /* --- SIDEBAR --- */
         .sidebar-right {
-            width: 80px; height: 100vh; background: var(--card);
+            width: 75px; height: 100vh; background: var(--card);
             border-left: 1px solid var(--border);
             display: flex; flex-direction: column; align-items: center;
-            padding: 20px 0; gap: 20px;
-            position: fixed; right: -72px; top: 0;
-            transition: 0.4s ease-in-out;
-            z-index: 1001; overflow-y: auto; scrollbar-width: none;
+            padding: 25px 0; gap: 18px;
+            position: fixed; right: -65px; top: 0;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2000; overflow-y: auto; scrollbar-width: none;
         }
         .sidebar-right:hover { right: 0; }
+        .sidebar-right::-webkit-scrollbar { display: none; }
 
         .nav-avatar {
-            width: 50px; height: 50px; border-radius: 50%; 
+            width: 48px; height: 48px; border-radius: 50%; 
             border: 2px solid var(--border); cursor: pointer;
-            transition: 0.3s; object-fit: cover;
+            transition: 0.2s; object-fit: cover;
         }
         .nav-avatar:hover { border-color: var(--accent); transform: scale(1.1); }
+        .home-icon { padding: 12px; filter: invert(1); opacity: 0.7; }
 
-        /* --- FOOTER AT BOTTOM --- */
         footer { flex-shrink: 0; padding: 30px; text-align: center; border-top: 1px solid var(--border); background: var(--card); }
         .footer-text { font-size: 13px; color: var(--muted); margin: 0; }
         .footer-accent { color: var(--accent); font-weight: 700; }
 
-        /* --- THEME TOGGLE (BOTTOM RIGHT) --- */
         #theme-toggle { 
-            position: fixed; bottom: 20px; right: 90px; width: 45px; height: 45px; 
+            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; 
             border-radius: 14px; background: var(--accent); display: flex; 
-            align-items: center; justify-content: center; cursor: pointer; z-index: 1000;
-            transition: 0.2s;
+            align-items: center; justify-content: center; cursor: pointer; z-index: 2500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-        #theme-toggle img { width: 20px; filter: brightness(0) invert(1); }
+        #theme-toggle img { width: 22px; transition: 0.2s; }
+        
+        body.dark #theme-icon { filter: brightness(0) invert(1); }
+        body.light #theme-icon { filter: brightness(0); }
 
         @media (max-width: 600px) {
             .container { padding: 20px; }
             h1 { font-size: 1.5rem; }
             .clip-grid { grid-template-columns: 1fr; }
-            #theme-toggle { right: 20px; } /* Move away from sidebar on mobile */
         }
     </style>
 </head>
@@ -119,7 +133,10 @@
 
 <div class="container">
     <header>
-        <a href="index.html" class="back-btn">← Back to Setup</a>
+        <div class="header-top">
+            <a href="index.html" class="back-btn">← Back to Setup</a>
+            <button class="login-btn" onclick="openLogin()">Login</button>
+        </div>
         <h1 id="page-title">Community <span>Clips</span></h1>
     </header>
 
@@ -139,17 +156,30 @@
 </div>
 
 <script>
-    const toggle = document.getElementById("theme-toggle");
+    // --- GOOGLE SCRIPT URL ---
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBgtXvbIjEaNeaghkblk4mQKGJ2ytauuqmNXeoFmbj-1BZ87Mmc0--f031iTGSvPmE/exec"; // REPLACE THIS
+
+    const themeToggle = document.getElementById("theme-toggle");
     const themeIcon = document.getElementById("theme-icon");
 
-    toggle.addEventListener("click", () => {
-        document.body.classList.toggle("light");
-        const isLight = document.body.classList.contains("light");
-        // FIX: Swaps Moon for Light and Sun for Dark
-        themeIcon.src = isLight 
-            ? "https://cdn-icons-png.flaticon.com/512/702/702471.png" 
-            : "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+    themeToggle.addEventListener("click", () => {
+        const isCurrentlyDark = document.body.classList.contains("dark");
+        if (isCurrentlyDark) {
+            document.body.classList.remove("dark");
+            document.body.classList.add("light");
+            themeIcon.src = "https://cdn-icons-png.flaticon.com/512/702/702471.png"; 
+        } else {
+            document.body.classList.remove("light");
+            document.body.classList.add("dark");
+            themeIcon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png"; 
+        }
     });
+
+    function openLogin() {
+        const w = 500, h = 600;
+        const left = (screen.width/2)-(w/2), top = (screen.height/2)-(h/2);
+        window.open(`${GOOGLE_SCRIPT_URL}?mode=login`, "AceLogin", `width=${w},height=${h},top=${top},left=${left}`);
+    }
 
     const sheetCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS8Q20sDcvSamzmdXOaZqRaLqWfHmoxhc4iAYMF68LZhKiE2v0aYui9LHBZJ0zuLZpHQusWCp3DuWRy/pub?output=csv&cb=" + new Date().getTime();
     const params = new URLSearchParams(window.location.search);
@@ -175,7 +205,7 @@
 
             const streamerMap = {};
             rows.forEach(row => {
-                const cols = row.split(/,(?=(?:(?:[^2]*"){2})*[^"]*$)/);
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (cols.length >= 6) {
                     const name = cols[4].trim().replace(/"/g, '');
                     const cid = cols[5].trim().replace(/"/g, '');
@@ -183,27 +213,30 @@
                 }
             });
 
-            // Sidebar: Add "Home" icon then streamer avatars
-            sidebar.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" class="nav-avatar" onclick="window.location.href='clips.html'" title="Show All" style="padding:12px; filter:invert(1)">`;
+            sidebar.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" class="nav-avatar home-icon" onclick="window.location.href='clips.html'" title="Show All">`;
+            
             Object.keys(streamerMap).forEach(name => {
-                sidebar.innerHTML += `<img src="https://unavatar.io/youtube/${streamerMap[name]}" class="nav-avatar" title="${name}" onclick="window.location.href='?streamer=${name}'" onerror="this.src='https://ui-avatars.com/api/?name=${name}'">`;
+                // If it's a URL (avatar), use it directly, otherwise use unavatar
+                let iconUrl = streamerMap[name].startsWith('http') ? streamerMap[name] : `https://unavatar.io/youtube/${streamerMap[name]}`;
+                sidebar.innerHTML += `<img src="${iconUrl}" class="nav-avatar" title="${name}" onclick="window.location.href='?streamer=${name}'" onerror="this.src='https://ui-avatars.com/api/?name=${name}'">`;
             });
 
-            if (filter) document.getElementById('page-title').innerHTML = `${filter} <span>Clips</span>`;
+            if (filter) document.getElementById('page-title').innerHTML = `${filter.toUpperCase()} <span>Clips</span>`;
 
             gallery.innerHTML = '';
             rows.forEach(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const cols = row.split(/,(?=(?:(?:[^**]*"){2})*[^"]*$)/);
                 if (cols.length < 4) return;
                 const id = cols[0].replace(/"/g, '').trim();
                 const user = cols[1] ? cols[1].replace(/"/g, '').trim() : "Viewer";
                 const title = cols[2] ? cols[2].replace(/"/g, '').trim() : "Epic Moment";
                 const time = cols[3] ? cols[3].replace(/"/g, '').trim() : "0";
                 const sName = cols[4] ? cols[4].trim().replace(/"/g, '') : "";
+                // Avatar from Column G (Index 5 or 6 depending on your sheet structure)
+                const userAvatar = cols[5] ? cols[5].replace(/"/g, '').trim() : 'https://www.gstatic.com/identity/boq/profileindex/placeholder_96.png';
 
                 if (filter && sName.toLowerCase() !== filter.toLowerCase()) return;
 
-                // 90 second jump logic
                 const start = Math.max(0, toSec(time) - 90);
                 const videoURL = `https://www.youtube.com/watch?v=${id}&t=${start}s`;
 
@@ -216,7 +249,10 @@
                         <div class="clip-info">
                             <span class="clip-title">${title}</span>
                             <div class="clip-meta">
-                                <span>by <span class="clipper-name">${user}</span></span>
+                                <div class="clipper-box">
+                                    <img src="${userAvatar}" class="clipper-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${user}'">
+                                    <span>by <span class="clipper-name">${user}</span></span>
+                                </div>
                                 <span class="timestamp">Play 90s</span>
                             </div>
                         </div>
